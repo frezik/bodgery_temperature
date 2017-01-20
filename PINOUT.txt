@@ -1,0 +1,2 @@
+GPIO0 -> SDA
+GPIO2 -> SCL
