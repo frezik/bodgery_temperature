@@ -23,25 +23,45 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include <Wire.h>
+#include <ESP8266WiFi.h>
 
 #define TMP_102_ADDR 0x48
+
+#define WIFI_SSID "the_bodgery"
+#define WIFI_PASS "0987654321"
+#define HOST "10.0.0.74"
+#define PORT 7399
 
 
 void setup()
 {
     Serial.begin( 9600 );
     Wire.begin( 0, 2 );
+
+    WiFi.mode( WIFI_STA );
+    WiFi.begin( WIFI_SSID, WIFI_PASS );
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay( 500 );
+    }
 }
 
 void loop()
 {
     float celsius = getTemperature();
-    Serial.print( "Celsius: " );
-    Serial.println( celsius );
-
+    sendTemperature( celsius );
     delay( 200 );
 }
 
+
+void sendTemperature( float celsius )
+{
+    WiFiClient client;
+    client.connect( HOST, PORT );
+    client.print( celsius );
+    client.print( "\n" );
+    client.stop();
+}
 
 float getTemperature ()
 {
