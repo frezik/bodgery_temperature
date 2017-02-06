@@ -1,0 +1,17 @@
+Logs temperature to a database over a simple HTTP API.
+
+The API call is:
+
+    POST /temp/:room_id/:temp
+
+Where `:room_id` is a unique ID for each sensor, and `:temp` is the 
+temperature in celsius.
+
+It works off an ESP8266 and a TMP102 sensor.  See `PINOUT.txt` for how to 
+wire it up. I suggest using the NodeMCU board for the ESP8266, and the 
+Sparkfun breakout board for the TMP102. You'll also need a USB power 
+adaptor that can provide at least an amp or so. Anything that is recommended 
+for use on a Raspberry Pi should be fine.
+
+See `mount.svg` for a laser-cuttable mount for attaching everything to a wall. 
+It's sized to fit the suggested boards above.
