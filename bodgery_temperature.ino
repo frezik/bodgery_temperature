@@ -29,8 +29,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define WIFI_SSID "the_bodgery"
 #define WIFI_PASS "0987654321"
-#define HOST "10.0.0.74"
-#define PORT 7399
+#define HOST "10.0.0.30"
+#define HOSTNAME "app.tyrion.thebodgery.org"
+#define PORT 80
+
+// Each sensor in the building needs its own unique room ID
+#define ROOM_ID 2
+
+// Time in ms between checking temp and sending
+#define DELAY 1 * 60 * 1000
 
 
 void setup()
@@ -50,7 +57,7 @@ void loop()
 {
     float celsius = getTemperature();
     sendTemperature( celsius );
-    delay( 200 );
+    delay( DELAY );
 }
 
 
@@ -58,8 +65,18 @@ void sendTemperature( float celsius )
 {
     WiFiClient client;
     client.connect( HOST, PORT );
+
+    client.print( "POST /temp/" );
+    client.print( ROOM_ID );
+    client.print( "/" );
     client.print( celsius );
-    client.print( "\n" );
+    client.print( " HTTP/1.1\r\n" );
+
+    client.print( "Host: " );
+    client.print( HOSTNAME );
+    client.print( "\r\n" );
+
+    client.print( "\r\n" );
     client.stop();
 }
 
